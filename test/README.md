@@ -60,6 +60,6 @@ graph TD
 
 ## 🔐 Keamanan & Whitelist
 Sistem ini menggunakan sistem *whitelist* berbasis nama. Nama-nama yang diizinkan meliputi:
-- `aisah`, `rabiathul`, `nadiyah`, `idris`, `daffa`, `fauzan`.
+- `aisah`, `rabiathul`, `nadiyah`,.
 
 Jika nama tidak terdaftar, ESP32 akan menolak akses dan menampilkan pesan peringatan di layar OLED.
