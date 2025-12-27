@@ -1,0 +1,15 @@
+# requirements.txt - Dependencies for Smart Package Box (app.py)
+# Install with: pip install -r requirements.txt
+# Notes: 
+# - PyAudio mungkin perlu build tools di Windows/Linux (e.g., apt install portaudio19-dev)
+# - SpeechRecognition butuh PyAudio untuk mic input
+# - gTTS untuk TTS (Google Text-to-Speech)
+# - pydub untuk audio format handling
+
+paho-mqtt>=1.6.1
+google-generativeai>=0.3.2
+SpeechRecognition>=3.10.0
+gTTS>=0.0.0
+pydub>=0.25.1
+python-dotenv>=1.0.0
+PyAudio>=0.2.11  # Untuk microphone input (platform-dependent)
