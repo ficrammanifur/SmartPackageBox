@@ -97,7 +97,7 @@ Sistem lengkap dengan Gemini AI untuk Natural Language Understanding.
 
 ```mermaid
 graph TD
-    A[👤 User Voice] -->|Mic| B[kurir_suara.py<br/>STT Engine]
+    A[👤 User Voice] -->|Mic| B[voice_ai.py<br/>STT Engine]
     B -->|Text| C[Flask Server<br/>app.py]
     C -->|Request| D[Gemini AI<br/>NLU]
     D -->|Decision JSON| C
