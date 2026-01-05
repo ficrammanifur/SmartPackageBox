@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 import paho.mqtt.client as mqtt
 import json
-    
+
 load_dotenv()
 app = Flask(__name__)
 CORS(app)
