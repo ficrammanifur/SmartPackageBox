@@ -9,6 +9,7 @@ import speech_recognition as sr
 from gtts import gTTS
 from pydub import AudioSegment
 from io import BytesIO
+import datetime  # <-- Tambah untuk timestamp
 
 load_dotenv()
 app = Flask(__name__)
@@ -21,11 +22,14 @@ MQTT_PUB_TOPIC = "package/command"
 MQTT_STATUS_TOPIC = "package/status"
 mqtt_client = mqtt.Client()
 mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
-mqtt_client.loop_start()
+
+def log_message(msg):
+    timestamp = datetime.datetime.now().strftime("%H:%M:%S")
+    print(f"[{timestamp}] {msg}")
 
 def send_cmd_to_esp(cmd_json):
     mqtt_client.publish(MQTT_PUB_TOPIC, json.dumps(cmd_json))
-    print(f"📡 Cmd ke ESP32: {cmd_json}")
+    log_message(f"📡 Published to ESP32: {cmd_json}")
 
 # Gemini
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
@@ -65,7 +69,7 @@ def generate_tts_wav(text, filename):
     response_path = os.path.join("static", filename)
     os.makedirs("static", exist_ok=True)
     response_audio.export(response_path, format="wav")
-    print(f"Generated {filename}: {text}")
+    log_message(f"🔊 Generated {filename}: {text}")
     return filename
 
 # ================= ROUTES =================
@@ -89,7 +93,7 @@ def audio_stream():
         with sr.AudioFile(wav_io) as source:
             audio_data = recognizer.record(source)
             text = recognizer.recognize_google(audio_data, language='id-ID')
-        print(f"👤 STT: {text}")
+        log_message(f"👤 STT: {text}")
         # Gemini
         decision = process_voice(text)
         tts_text = decision.get("tts_text", "Respons default")
@@ -104,11 +108,12 @@ def audio_stream():
         send_cmd_to_esp({"cmd": "set_status", "state": "Menjawab"})
         return jsonify({"status": "processed", "text": text}), 200
     except Exception as e:
-        print(f"[Error]: {e}")
+        log_message(f"[Error Audio Stream]: {e}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/audio/<filename>')
 def serve_audio(filename):
+    log_message(f"📥 Serving audio: {filename}")
     return send_file(os.path.join("static", filename))
 
 @app.route('/health')
@@ -116,20 +121,35 @@ def health():
     return jsonify({"status": "OK"})
 
 # ================= MQTT HANDLER =================
+def on_mqtt_connect(client, userdata, flags, rc):
+    if rc == 0:
+        log_message("✅ MQTT Connected to Broker")
+        client.subscribe(MQTT_STATUS_TOPIC)
+        log_message(f"📡 Subscribed to {MQTT_STATUS_TOPIC}")
+    else:
+        log_message(f"❌ MQTT Connect Failed: {rc}")
+
 def on_mqtt_message(client, userdata, msg):
     topic = msg.topic
     payload = msg.payload.decode().strip()
+    log_message(f"📨 MQTT Received - Topic: {topic}, Payload: {payload}")
+    
     if topic == MQTT_STATUS_TOPIC and payload == "boot_ready":
-        print("🤖 ESP32 Online — kirim suara welcome")
+        log_message("🤖 ESP32 Online — kirim suara welcome")
         send_cmd_to_esp({"cmd": "set_status", "state": "Menyapa"})
-        greeting_text = "Halo, saya kurir paket."  # <-- DIUBAH SESUAI REQUEST KAMU
+        greeting_text = "Halo, saya kurir paket."
         filename = "welcome.wav"
         generate_tts_wav(greeting_text, filename)
         send_cmd_to_esp({"cmd": "play_audio", "file": filename})
 
+def on_mqtt_publish(client, userdata, mid):
+    log_message(f"📤 MQTT Publish Confirmed (MID: {mid})")
+
+mqtt_client.on_connect = on_mqtt_connect
 mqtt_client.on_message = on_mqtt_message
-mqtt_client.subscribe(MQTT_STATUS_TOPIC)
+mqtt_client.on_publish = on_mqtt_publish
+mqtt_client.loop_start()
 
 if __name__ == '__main__':
-    print("🚀 PC Server Aktif! (HTTP + MQTT)")
+    log_message("🚀 PC Server Aktif! (HTTP + MQTT)")
     app.run(host='0.0.0.0', port=5000, debug=True)
