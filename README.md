@@ -8,8 +8,9 @@
   <img src="https://img.shields.io/badge/Web-Dashboard-orange?style=for-the-badge&logo=html5" />
 </p>
 
+
+<h2 align="center"> 🎯 Overview
 <p align="center">
-🎯 Overview
 Smart Package Box System adalah sistem kotak paket pintar berbasis IoT yang mengintegrasikan **ESP32**, **Python Flask**, dan **Gemini AI** untuk manajemen pengiriman paket yang aman dan cerdas. Sistem ini menggunakan voice recognition (STT), AI natural language processing (NLU), dan protocol MQTT untuk komunikasi real-time. Pengguna dapat membuka kotak hanya dengan menyebutkan nama mereka, yang divalidasi oleh AI dan whitelist security system.
 </p>
 
