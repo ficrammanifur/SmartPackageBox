@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📦 Paket Pintar – AI Delivery Assistant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <span class="logo-icon">📦</span>
+                    <div class="logo-text">
+                        <h1>Paket Pintar</h1>
+                        <p>AI Delivery Assistant</p>
+                    </div>
+                </div>
+                <div class="connection-status">
+                    <span class="status-indicator" id="mqtt-status"></span>
+                    <span id="mqtt-text">Menghubungkan...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- AI Status Section -->
+            <section class="status-card ai-status">
+                <div class="card-header">
+                    <h2>⚙️ Status AI</h2>
+                    <span class="badge">Real-time</span>
+                </div>
+                <div class="status-grid">
+                    <div class="status-item" id="status-listening">
+                        <div class="status-icon listening-icon">🎤</div>
+                        <span class="status-label">Listening</span>
+                    </div>
+                    <div class="status-item" id="status-thinking">
+                        <div class="status-icon thinking-icon">💭</div>
+                        <span class="status-label">Thinking</span>
+                    </div>
+                    <div class="status-item" id="status-speaking">
+                        <div class="status-icon speaking-icon">🔊</div>
+                        <span class="status-label">Speaking</span>
+                    </div>
+                    <div class="status-item" id="status-sleep">
+                        <div class="status-icon sleep-icon">😴</div>
+                        <span class="status-label">Sleep</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Package Info Section -->
+            <section class="status-card package-info">
+                <div class="card-header">
+                    <h2>📬 Info Paket</h2>
+                    <span class="badge">Current</span>
+                </div>
+                <div class="package-details">
+                    <div class="detail-row">
+                        <span class="label">Status Paket:</span>
+                        <span class="value" id="package-status">Menunggu deteksi</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Penerima:</span>
+                        <span class="value" id="recipient-name">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Waktu Delivery:</span>
+                        <span class="value" id="delivery-time">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">AI Response:</span>
+                        <span class="value" id="ai-response">Menunggu...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity Log Section -->
+            <section class="status-card activity-log">
+                <div class="card-header">
+                    <h2>📋 Log Aktivitas</h2>
+                    <button class="btn-clear" id="clear-logs">Hapus Log</button>
+                </div>
+                <div class="log-container" id="activity-logs">
+                    <div class="log-entry info">
+                        <span class="timestamp">--:--:--</span>
+                        <span class="message">Sistem dimulai. Menunggu perangkat...</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
