@@ -46,7 +46,8 @@ def process_voice(text):
         return {"cmd": "set_status", "state": "Mendengarkan", "tts_text": "Permisi, ada paket. Dengan siapa saya berbicara?"}
     response = model.generate_content(text)
     result = json.loads(response.text.strip())
-    if result.get("action") == "sleep": SLEEP_MODE = True
+    if result.get("action") == "sleep": 
+        SLEEP_MODE = True
     return result
 
 # STT
@@ -120,7 +121,7 @@ def on_mqtt_message(client, userdata, msg):
     payload = msg.payload.decode().strip()
     if topic == MQTT_STATUS_TOPIC and payload == "boot_ready":
         print("🤖 ESP32 Online — kirim suara sambutan")
-        send_cmd_to_esp({"cmd": "set_status", "state": "Menyapa"})  # Fase 3: Update OLED
+        send_cmd_to_esp({"cmd": "set_status", "state": "Menyapa"})
         greeting_text = "Halo, perangkat siap digunakan. Silakan berbicara."
         filename = "welcome.wav"
         generate_tts_wav(greeting_text, filename)
