@@ -120,9 +120,9 @@ def on_mqtt_message(client, userdata, msg):
     topic = msg.topic
     payload = msg.payload.decode().strip()
     if topic == MQTT_STATUS_TOPIC and payload == "boot_ready":
-        print("🤖 ESP32 Online — kirim suara sambutan")
+        print("🤖 ESP32 Online — kirim suara welcome")
         send_cmd_to_esp({"cmd": "set_status", "state": "Menyapa"})
-        greeting_text = "Halo, perangkat siap digunakan. Silakan berbicara."
+        greeting_text = "Halo, saya kurir paket."  # <-- DIUBAH SESUAI REQUEST KAMU
         filename = "welcome.wav"
         generate_tts_wav(greeting_text, filename)
         send_cmd_to_esp({"cmd": "play_audio", "file": filename})
